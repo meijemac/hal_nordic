@@ -35,6 +35,7 @@ void nrfs_usb_service_notify(void *p_notification, size_t size)
 		evt.usbhspll_ok	  = p_rsp->data.pll_ok;
 		evt.vregusb_ok	  = p_rsp->data.vreg_ok;
 		evt.vbus_detected = p_rsp->data.vbus_detected;
+		evt.ld_status	  = p_rsp->data.ld_status;
 		m_cb.handler(&evt, (void *)p_rsp->ctx.ctx);
 		break;
 
@@ -86,3 +87,34 @@ nrfs_err_t nrfs_usb_disable_request(void *p_context)
 
 	return nrfs_backend_send(&req, sizeof(req));
 }
+
+nrfs_err_t nrfs_usb_ld_boolean_enable_request(void *p_context)
+{
+	if (!m_cb.is_initialized) {
+		return NRFS_ERR_INVALID_STATE;
+	}
+
+	nrfs_usb_ld_boolean_enable_req_t req;
+
+	NRFS_SERVICE_HDR_FILL(&req, NRFS_USB_REQ_LD_BOOLEAN_ENABLE);
+	NRFS_HDR_NO_RSP_SET(&req.hdr);
+	req.ctx.ctx = (uint32_t)p_context;
+
+	return nrfs_backend_send(&req, sizeof(req));
+}
+
+nrfs_err_t nrfs_usb_ld_boolean_disable_request(void *p_context)
+{
+	if (!m_cb.is_initialized) {
+		return NRFS_ERR_INVALID_STATE;
+	}
+
+	nrfs_usb_ld_boolean_disable_req_t req;
+
+	NRFS_SERVICE_HDR_FILL(&req, NRFS_USB_REQ_LD_BOOLEAN_DISABLE);
+	NRFS_HDR_NO_RSP_SET(&req.hdr);
+	req.ctx.ctx = (uint32_t)p_context;
+
+	return nrfs_backend_send(&req, sizeof(req));
+}
+

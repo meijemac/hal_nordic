@@ -25,6 +25,7 @@ typedef struct {
 	bool vbus_detected;	  /** True if USB VBUS voltage is detected. */
 	bool vregusb_ok;	  /** True if VREG is running OK. */
 	bool usbhspll_ok;	  /** True if PLL is running OK. */
+	bool ld_status;		  /** Status of global boolean set by LD */
 } nrfs_usb_evt_t;
 
 /** @brief USB VBUS detector service event handler type. */
@@ -68,6 +69,29 @@ nrfs_err_t nrfs_usb_enable_request(void * p_context);
  * @retval NRFS_ERR_IPC           Backend returned error during request sending.
  */
 nrfs_err_t nrfs_usb_disable_request(void * p_context);
+
+/**
+ * @brief Function for requesting to enable a global boolean within the USB Service.
+ *
+ * @param[in] p_context Opaque user data that will be passed to registered callback.
+ *
+ * @retval NRFS_SUCCESS           Request sent successfully.
+ * @retval NRFS_ERR_INVALID_STATE Service is uninitialized.
+ * @retval NRFS_ERR_IPC           Backend returned error during request sending.
+ */
+nrfs_err_t nrfs_usb_ld_boolean_enable_request(void* p_context);
+
+/**
+ * @brief Function for requesting to disable a global boolean within the USB Service.
+ *
+ * @param[in] p_context Opaque user data that will be passed to registered callback.
+ *
+ * @retval NRFS_SUCCESS           Request sent successfully.
+ * @retval NRFS_ERR_INVALID_STATE Service is uninitialized.
+ * @retval NRFS_ERR_IPC           Backend returned error during request sending.
+ */
+nrfs_err_t nrfs_usb_ld_boolean_disable_request(void * p_context);
+
 
 #ifdef __cplusplus
 }
